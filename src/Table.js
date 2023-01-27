@@ -3,9 +3,10 @@ import Cell from './Cell';
 import React, {useState} from "react";
 
 //18*18
-function Table({play, interval, changeInterval}) {
+function Table({play, int, setInt}) {
     const [matrix, changeMatrix] = useState(Array(18).fill(null).map(()=>Array(18).fill(0)))
     const [key, setKey] = useState(1) // render
+    
 
     
     function changeCellBeforeStart(cellRow, cellColumn, action){
@@ -23,7 +24,7 @@ function Table({play, interval, changeInterval}) {
             matrix2[cellRow][cellColumn]=0
             changeMatrix(matrix2)
         }
-        setKey(key+1) // render
+        setKey((key)=>key+1) // render
     }
 
     function changeCell(cellRow, cellColumn, action){
@@ -41,38 +42,38 @@ function Table({play, interval, changeInterval}) {
             matrix2[cellRow][cellColumn]=0
             changeMatrix(matrix2)
         }
-        setKey(key+1) // render
+        setKey((key)=>key+1) // render
     }
 
     function processMatrix(){
-        let newMatrix = matrix
-        matrix.map((matrixRow, ind1)=>{
-            matrixRow.map((thisCell, ind2)=>{
-                console.log(thisCell)
+        // let newMatrix = matrix
+        // matrix.map((matrixRow, ind1)=>{
+        //     matrixRow.map((thisCell, ind2)=>{
+                
 
-
-
-
-
-            })
-        })
+        //     })
+        // })
             
         //
     }
-
-    if(play==true){
-        if(interval==false){
-            var mainTimer = setInterval(()=>{
-                processMatrix()
-            }, 500)
-            changeInterval(true)
+    
+    if(play==false){
+        console.log("not playing")
+        if(int!=null){
+            clearInterval(int)
+            setInt(null)
         }
+        console.log(int)
     }
-    else if(play==false){
-        if(interval==true){
-            clearInterval(mainTimer)
-            changeInterval(false)
+    else if(play==true){
+        console.log("playing")
+        if(int==null){
+            setInt(setInterval(()=>{
+                console.log("a")
+            }, 500))
         }
+        
+        console.log(int)
     }
 
     return (
