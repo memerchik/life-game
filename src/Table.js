@@ -1,11 +1,29 @@
 import './App.css';
 import Cell from './Cell';
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 //18*18
-function Table({play, int, setInt}) {
+function Table({play}) {
     const [matrix, changeMatrix] = useState(Array(18).fill(null).map(()=>Array(18).fill(0)))
     const [key, setKey] = useState(1) // render
+
+    function countNeighbours(cellRow, cellColumn){
+        let neighboursCount=0;
+        if(cellRow != 0 && cellColumn != 0 && cellRow != matrix.length - 1 && cellColumn!=matrix.length-1){
+            for(let i=cellRow-1;i<cellRow+2;i++){
+                if(matrix[i][cellColumn-1]==1){
+                    neighboursCount++;
+                }
+                if(matrix[i][cellColumn+1]==1){
+                    neighboursCount++;
+                }
+                if(matrix[i][cellColumn]==1&&i!=cellRow){
+                    neighboursCount++;
+                }
+            }
+        }
+        return neighboursCount
+    }
     
 
     
@@ -18,6 +36,7 @@ function Table({play, int, setInt}) {
             let matrix2 = matrix;
             matrix2[cellRow][cellColumn]=1
             changeMatrix(matrix2)
+            console.log(countNeighbours(cellRow, cellColumn))
         }
         if(action=="setDead"){
             let matrix2 = matrix;
@@ -45,35 +64,42 @@ function Table({play, int, setInt}) {
         setKey((key)=>key+1) // render
     }
 
-    function processMatrix(){
-        // let newMatrix = matrix
-        // matrix.map((matrixRow, ind1)=>{
-        //     matrixRow.map((thisCell, ind2)=>{
-                
-
-        //     })
-        // })
-            
-        //
-    }
-    
-    if(play==false){
-        console.log("not playing")
-        if(int!=null){
-            clearInterval(int)
-            setInt(null)
+    //Play/Stop switch
+    useEffect(() => {
+        const interval = setInterval(() => {
+            //function call here
+            console.log('This will be called every 2 seconds');
+        }, 500);
+        
+        if(play==true){
+            return ()=> clearInterval(interval);
         }
-        console.log(int)
-    }
-    else if(play==true){
-        console.log("playing")
-        if(int==null){
-            setInt(setInterval(()=>{
-                console.log("a")
-            }, 500))
+        else{
+            clearInterval(interval);
         }
         
-        console.log(int)
+    }, [play]);
+
+    //function
+
+    function processMatrix(){
+        let newMatrix = matrix
+
+        
+
+        
+
+        matrix.map((matrixRow, ind1)=>{
+            matrixRow.map((thisCell, ind2)=>{
+                //Checks if cell has to die
+
+                //check 1
+
+                
+            })
+        })
+        
+
     }
 
     return (

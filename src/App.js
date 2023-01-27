@@ -6,10 +6,9 @@ import React, {useState} from "react";
 function App() {
   
   const [play, setPlay] = useState(false)
-  const [intervall, sett] = useState(null)
   return (
     <div className="App">
-      <Table play={play} int = {intervall} setInt={sett}/>
+      <Table play={play}/>
       <StartBtn play={play} changePlay={setPlay}/>
     </div>
   );
