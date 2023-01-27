@@ -1,16 +1,20 @@
 import './App.css';
-import Cell from './Cell';
-import Table from './Table'
 import React, {useState} from "react";
-function App() {
-  
+function StartBtn({play, changePlay}) {
+  function switchPlay(){
+    if(play==true){
+      changePlay(false)
+    }
+    else{
+      changePlay(true)
+    }
+  }
   return (
-    <div className="startBtn">
-      <Table/>
-      
+    <div className="StartBtn">
+      <button onClick={()=>switchPlay()}>Start the game</button>
     </div>
   );
 
 }
 
-export default App;
+export default StartBtn;
