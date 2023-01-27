@@ -9,6 +9,8 @@ function Table({play}) {
 
     function countNeighbours(cellRow, cellColumn){
         let neighboursCount=0;
+
+        //default case
         if(cellRow != 0 && cellColumn != 0 && cellRow != matrix.length - 1 && cellColumn!=matrix.length-1){
             for(let i=cellRow-1;i<cellRow+2;i++){
                 if(matrix[i][cellColumn-1]==1){
@@ -21,8 +23,11 @@ function Table({play}) {
                     neighboursCount++;
                 }
             }
+            return neighboursCount
         }
-        return neighboursCount
+
+
+        
     }
     
 
