@@ -1,6 +1,6 @@
 # Life Game
 
-This is a copy of a game of life written in React.js
+This is a copy of **John Conway's game of life** written in React.js
 
 ## Installing the game
 
