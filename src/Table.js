@@ -289,8 +289,8 @@ function Table({play}) {
             })
         })
 
-        console.log("empty", emptyCells)
-        console.log("filled", filledCells)
+        //console.log("empty", emptyCells)
+        //console.log("filled", filledCells)
 
         //Check empty cells
         emptyCells.map((thisCell, ind)=>{

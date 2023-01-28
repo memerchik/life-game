@@ -11,7 +11,7 @@ function StartBtn({play, changePlay}) {
   }
   return (
     <div className="StartBtn">
-      <button onClick={()=>switchPlay()}>Start the game {play == true ? "started" : "not started"}</button>
+      <button onClick={()=>switchPlay()}>{play == true ? "Pause" : "Start"}</button>
     </div>
   );
 
