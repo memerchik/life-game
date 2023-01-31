@@ -13,7 +13,7 @@ This is a copy of **John Conway's game of life** written in React.js
 
 ## Playing the game
 
-When the game is loaded you will see a 18 by 18 table with empty cells
+When the game is loaded you will see an 18 by 18 table with empty cells
 
 1. Click on the cells you want to be filled
 2. Click on **Start** button to start the game
@@ -31,8 +31,15 @@ To change the matrix size change value of the input type nuber in the bottom of 
 
 ## Cells rules
 
-### Cells populating rules
+### Cell becomes populated when:
 
-1. When cell has 3 neighbours it becomes populated, and all 3 its neighbour cells become unpopulated unless they suit one of the cells staying rules
+1. It has 3 neighbours, but all 3 its neighbour cells die unless they suit one of the cell surviving conditions
 
-## Cell 
+### Cell dies when:
+
+1. It has 1 or 0 neighbours
+2. It has 4 or more neighbours
+
+### Cell survives when:
+
+1. It has 2 or 3 neighbours
