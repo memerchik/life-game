@@ -3,8 +3,10 @@ import Cell from './Cell';
 import React, {useState, useEffect} from "react";
 
 //18*18
-function Table({play}) {
-    const [matrix, changeMatrix] = useState(Array(18).fill(null).map(()=>Array(18).fill(0)))
+function Table({play, playSpeed, matrixSize}) {
+    console.log(matrixSize)
+    const [matrix, changeMatrix] = useState(Array(matrixSize).fill(null).map(()=>Array(matrixSize).fill(0)))
+
     const [key, setKey] = useState(1) // render
 
     function countNeighbours(cellRow, cellColumn){
@@ -226,7 +228,7 @@ function Table({play}) {
         if(action=="setAlive"){
             let matrix2 = matrix;
             matrix2[cellRow][cellColumn]=1
-            console.log(countNeighbours(cellRow, cellColumn).length)
+            //console.log(countNeighbours(cellRow, cellColumn).length)
             changeMatrix(matrix2)
         }
         if(action=="setDead"){
@@ -242,7 +244,7 @@ function Table({play}) {
         setKey((key)=>key+1)
         const interval = setInterval(() => {
             processMatrix(matrix)
-        }, 500);
+        }, playSpeed);
         
         if(play==true){
             return ()=> clearInterval(interval);
@@ -256,7 +258,7 @@ function Table({play}) {
     //function
 
     function processMatrix(matrix){
-        let newMatrix = Array(18).fill(null).map(()=>Array(18).fill(0))
+        let newMatrix = Array(matrixSize).fill(null).map(()=>Array(matrixSize).fill(0))
         matrix.map((matrixRow, ind1)=>{
             matrixRow.map((filled, ind2)=>{
                 newMatrix[ind1][ind2]=matrix[ind1][ind2]
@@ -327,12 +329,12 @@ function Table({play}) {
       <div className="game-table">
         {matrix.map((matrixRow, ind1)=>(
             matrixRow.map((thisCell, ind2)=>{
-                let number = ind1*18+ind2
+                let number = ind1*matrixSize+ind2
                 if(thisCell==1){
-                    return (<Cell type="yellow" click={changeCellBeforeStart} number={number}/>)
+                    return (<Cell type="yellow" click={changeCellBeforeStart} number={number} matrixSize={matrixSize}/>)
                 }
                 else{
-                    return (<Cell type="grey" click={changeCellBeforeStart} number={number}/>)
+                    return (<Cell type="grey" click={changeCellBeforeStart} number={number} matrixSize={matrixSize}/>)
                 }
             })
         ))}
