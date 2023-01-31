@@ -1,4 +1,4 @@
-# Life Game
+# Game of Life
 
 This is a copy of **John Conway's game of life** written in React.js
 
