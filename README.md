@@ -27,19 +27,17 @@ To change the game speed you need to drag the range in the bottom. It changes th
 
 To change the matrix size change value of the input type nuber in the bottom of the page. The matrix will be automatically resized as soon as you change value of the input
 
-# Game logics
+# Rules
 
-## Cells rules
-
-### Cell becomes populated when:
+## Cell becomes populated when:
 
 1. It has 3 neighbours, but all 3 its neighbour cells die unless they suit one of the cell surviving conditions
 
-### Cell dies when:
+## Cell dies when:
 
 1. It has 1 or 0 neighbours
 2. It has 4 or more neighbours
 
-### Cell survives when:
+## Cell survives when:
 
 1. It has 2 or 3 neighbours
