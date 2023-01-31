@@ -16,3 +16,11 @@ When the game is loaded you will see a 18 by 18 table with empty cells
 1. Click on the cells you want to be filled
 2. Click on **Start** button to start the game
 3. To pause the game click **Stop**
+
+## Changing game speed
+
+To change the game speed you need to drag the range in the bottom. It changes the speed of the game as soon as you drag it
+
+## Changing the matrix size
+
+To change the matrix size change value of the input type nuber in the bottom of the page. The matrix will be automatically resized as soon as you change value of the input
