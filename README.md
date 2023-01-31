@@ -2,6 +2,8 @@
 
 This is a copy of **John Conway's game of life** written in React.js
 
+# How to play
+
 ## Installing the game
 
 1. Install Node.js
@@ -24,3 +26,13 @@ To change the game speed you need to drag the range in the bottom. It changes th
 ## Changing the matrix size
 
 To change the matrix size change value of the input type nuber in the bottom of the page. The matrix will be automatically resized as soon as you change value of the input
+
+# Game logics
+
+## Cells rules
+
+### Cells populating rules
+
+1. When cell has 3 neighbours it becomes populated, and all 3 its neighbour cells become unpopulated unless they suit one of the cells staying rules
+
+## Cell 
