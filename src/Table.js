@@ -255,6 +255,19 @@ function Table({play, playSpeed, matrixSize}) {
         
     }, [play, matrix]);
 
+    useEffect(()=>{
+        let newMatrix = Array(matrixSize).fill(null).map(()=>Array(matrixSize).fill(0))
+        matrix.map((matrixRow, ind1)=>{
+            matrixRow.map((filled, ind2)=>{
+                if(ind1<matrixSize&&ind2<matrixSize){
+                    newMatrix[ind1][ind2]=matrix[ind1][ind2]
+                }
+                
+            })
+        })
+        changeMatrix(newMatrix)
+    }, [matrixSize])
+
     //function
 
     function processMatrix(matrix){
@@ -331,10 +344,10 @@ function Table({play, playSpeed, matrixSize}) {
             matrixRow.map((thisCell, ind2)=>{
                 let number = ind1*matrixSize+ind2
                 if(thisCell==1){
-                    return (<Cell type="yellow" click={changeCellBeforeStart} number={number} matrixSize={matrixSize}/>)
+                    return (<Cell type="yellow" click={changeCellBeforeStart} number={number} row={ind1} col={ind2} matrixSize={matrixSize}/>)
                 }
                 else{
-                    return (<Cell type="grey" click={changeCellBeforeStart} number={number} matrixSize={matrixSize}/>)
+                    return (<Cell type="grey" click={changeCellBeforeStart} number={number} row={ind1} col={ind2} matrixSize={matrixSize}/>)
                 }
             })
         ))}

@@ -1,7 +1,7 @@
 import './App.css';
 import {useRef} from "react";
 
-function Cell({type, number, click, matrixSize}) {
+function Cell({type, number, click, matrixSize, col, cellRow}) {
     let cellSize = 800/matrixSize+"px"
     let alive = false
     let ref = useRef(null)
@@ -21,15 +21,13 @@ function Cell({type, number, click, matrixSize}) {
     if(type=="yellow"){
         alive = true
         return (
-            <div className="Cell yellow" ref={ref} onClick={()=>MyClick()} style={{height: cellSize, width: cellSize}}>
-                {number}
+            <div className="Cell yellow" ref={ref} onClick={()=>MyClick()} style={{height: cellSize, width: cellSize}} num={number} row={cellRow} col={col}>
             </div>
         );
     }
     else{
         return (
-            <div className="Cell" ref={ref} onClick={()=>MyClick()} style={{height: cellSize, width: cellSize}}>
-                {number}
+            <div className="Cell" ref={ref} onClick={()=>MyClick()} style={{height: cellSize, width: cellSize}} num={number} row={cellRow} col={col}>
             </div>
         );
     }

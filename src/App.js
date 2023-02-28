@@ -6,6 +6,7 @@ import React, {useState} from "react";
 import SpeedSelector from './SpeedSelector';
 import MatrixSize from './MatrixSize';
 function App() {
+  const [rnd, render] = useState(0)
   const [matrixSize, changeSize] = useState(20)
   const [play, setPlay] = useState(false)
   const [playSpeed, changePlaySpeed] = useState(500)
