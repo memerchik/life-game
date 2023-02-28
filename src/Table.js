@@ -2,9 +2,8 @@ import './App.css';
 import Cell from './Cell';
 import React, {useState, useEffect} from "react";
 
-//18*18
-function Table({play, playSpeed, matrixSize}) {
-    console.log(matrixSize)
+
+function Table({play, playSpeed, matrixSize, down}) {
     const [matrix, changeMatrix] = useState(Array(matrixSize).fill(null).map(()=>Array(matrixSize).fill(0)))
 
     const [key, setKey] = useState(1) // render
@@ -266,6 +265,7 @@ function Table({play, playSpeed, matrixSize}) {
             })
         })
         changeMatrix(newMatrix)
+        console.log(newMatrix)
     }, [matrixSize])
 
     //function
@@ -344,10 +344,10 @@ function Table({play, playSpeed, matrixSize}) {
             matrixRow.map((thisCell, ind2)=>{
                 let number = ind1*matrixSize+ind2
                 if(thisCell==1){
-                    return (<Cell type="yellow" click={changeCellBeforeStart} number={number} row={ind1} col={ind2} matrixSize={matrixSize}/>)
+                    return (<Cell type="yellow" click={changeCellBeforeStart} number={number} row={ind1} col={ind2} matrixSize={matrixSize} down={down}/>)
                 }
                 else{
-                    return (<Cell type="grey" click={changeCellBeforeStart} number={number} row={ind1} col={ind2} matrixSize={matrixSize}/>)
+                    return (<Cell type="grey" click={changeCellBeforeStart} number={number} row={ind1} col={ind2} matrixSize={matrixSize} down={down}/>)
                 }
             })
         ))}
