@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Axios from 'axios'
 
 
@@ -7,6 +7,9 @@ function Login() {
     const [passwordReg, setPasswordReg] = useState()
     const [usernameLog, setUsernameLog] = useState()
     const [passwordLog, setPasswordLog] = useState()
+    const [loginStatus, setLogin] = useState()
+
+    Axios.defaults.withCredentials = true;
 
     const register = ()=>{
         Axios.post("http://localhost:3001/register",
@@ -25,8 +28,25 @@ function Login() {
             password: passwordLog
         }).then((res)=>{
             console.log(res)
+            if(res.data.message){
+                setLogin(res.data.message)
+            }
+            else{
+                setLogin(res.data[0].username)
+            }
         })
     }
+
+    useEffect(()=>{
+        Axios.get("http://localhost:3001/login").then((res)=>{
+            if(res.data.loggedin == true){
+                setLogin(res.data.user[0].username)
+            }
+            else{
+                setLogin("Not logged in")
+            }
+        })
+    }, [])
 
     return (
         <div className='LoginPage'>
@@ -40,6 +60,7 @@ function Login() {
                 <input type="text" id="logPassword" onChange={(e)=>{setPasswordLog(e.target.value)}}/>
                 <button onClick={login}>Login</button>
             </div>
+            <div>{loginStatus}</div>
         </div>
     )
 }
