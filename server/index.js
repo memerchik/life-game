@@ -97,7 +97,7 @@ app.post('/login', (req, res)=>{
 })
 
 const verifyJWT = (req, res, next)=>{
-    const token = req.headers("x-access-token")
+    const token = req.headers["x-access-token"]
     if(!token){
         res.send("You don't have a token")
     }
@@ -106,7 +106,7 @@ const verifyJWT = (req, res, next)=>{
             if(err){
                 res.json({
                     auth: false,
-                    message: "You failde to authenticate"
+                    message: "You failed to authenticate"
                 })
             }
             else{
@@ -128,6 +128,12 @@ app.get("/login", (req, res)=>{ // check if user is logged in
     else{
         res.send({loggedin: false})
     }
+})
+
+app.get("/logout", verifyJWT, (req, res)=>{
+    req.session.destroy();
+    // res.redirect('http://localhost:3000/');
+    //res.send()
 })
 
 app.listen(PORT, ()=>{

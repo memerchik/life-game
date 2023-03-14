@@ -33,6 +33,7 @@ function Login() {
                 setLogin(false)
             }
             else{
+                localStorage.setItem("token", res.data.token)
                 setLogin(true)
             }
         })
@@ -52,7 +53,17 @@ function Login() {
     const userAuthenticated = () => {
         Axios.get("http://localhost:3001/isUserAuth", {
             headers:{
-                "x-access-token":"sdad"
+                "x-access-token": localStorage.getItem("token")
+            }
+        }).then((response)=>{
+            console.log(response)
+        })
+    }
+
+    const logout = ()=>{
+        Axios.get("http://localhost:3001/logout", {
+            headers:{
+                "x-access-token": localStorage.getItem("token")
             }
         }).then((response)=>{
             console.log(response)
@@ -74,7 +85,7 @@ function Login() {
             {loginStatus && (
                 <div>
                     <button onClick={userAuthenticated}>Check authentification</button>
-                    <div></div>
+                    <button onClick={logout}>Logout</button>
                 </div>
             )}
             
