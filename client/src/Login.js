@@ -8,6 +8,7 @@ function Login() {
     const [usernameLog, setUsernameLog] = useState()
     const [passwordLog, setPasswordLog] = useState()
     const [loginStatus, setLogin] = useState(false)
+    
 
     Axios.defaults.withCredentials = true;
 
@@ -51,7 +52,7 @@ function Login() {
     const userAuthenticated = () => {
         Axios.get("http://localhost:3001/isUserAuth", {
             headers:{
-
+                "x-access-token":"sdad"
             }
         }).then((response)=>{
             console.log(response)
