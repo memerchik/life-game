@@ -8,6 +8,8 @@ const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
 const session = require("express-session")
 
+const jwt = require("jsonwebtoken")
+
 const app = express();
 
 const PORT = 3001
@@ -72,9 +74,16 @@ app.post('/login', (req, res)=>{
         else if(result.length>0){
             bcrypt.compare(password, result[0].password, (error, resp)=>{
                 if(resp){
+                
+                    const id = result[0].id
+                    const token = jwt.sign({id}, "writeENVvariableHere", {
+                        expiresIn: 300,
+                    })
+
                     req.session.user = result
+
                     console.log(req.session.user)
-                    res.send(result)
+                    res.json({auth: true, token: token, result: result})
                 }
                 else{
                     res.send({message : "Wrong username/password combination"})
@@ -87,7 +96,32 @@ app.post('/login', (req, res)=>{
     })
 })
 
-app.get("/login", (req, res)=>{
+const verifyJWT = (req, res, next)=>{
+    const token = req.headers("x-access-token")
+    if(!token){
+        res.send("You don't have a token")
+    }
+    else{
+        jwt.verify(token, "writeENVvariableHere", (err, decoded)=>{
+            if(err){
+                res.json({
+                    auth: false,
+                    message: "You failde to authenticate"
+                })
+            }
+            else{
+                req.userid = decoded.id
+                next();
+            }
+        })
+    }
+}
+
+app.get("/isUserAuth", verifyJWT, (req, res)=>{
+    res.send("U are authenticated")
+})
+
+app.get("/login", (req, res)=>{ // check if user is logged in
     if(req.session.user){
         res.send({loggedin: true, user: req.session.user})
     }

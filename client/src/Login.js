@@ -7,11 +7,11 @@ function Login() {
     const [passwordReg, setPasswordReg] = useState()
     const [usernameLog, setUsernameLog] = useState()
     const [passwordLog, setPasswordLog] = useState()
-    const [loginStatus, setLogin] = useState()
+    const [loginStatus, setLogin] = useState(false)
 
     Axios.defaults.withCredentials = true;
 
-    const register = ()=>{
+    const register = () => {
         Axios.post("http://localhost:3001/register",
         {
             username: usernameReg,
@@ -21,7 +21,7 @@ function Login() {
         })
     }
 
-    const login = ()=>{
+    const login = () => {
         Axios.post("http://localhost:3001/login",
         {
             username: usernameLog,
@@ -29,24 +29,34 @@ function Login() {
         }).then((res)=>{
             console.log(res)
             if(res.data.message){
-                setLogin(res.data.message)
+                setLogin(false)
             }
             else{
-                setLogin(res.data[0].username)
+                setLogin(true)
             }
         })
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         Axios.get("http://localhost:3001/login").then((res)=>{
             if(res.data.loggedin == true){
-                setLogin(res.data.user[0].username)
+                setLogin(true)
             }
             else{
-                setLogin("Not logged in")
+                setLogin(false)
             }
         })
     }, [])
+
+    const userAuthenticated = () => {
+        Axios.get("http://localhost:3001/isUserAuth", {
+            headers:{
+
+            }
+        }).then((response)=>{
+            console.log(response)
+        })
+    }
 
     return (
         <div className='LoginPage'>
@@ -60,7 +70,13 @@ function Login() {
                 <input type="text" id="logPassword" onChange={(e)=>{setPasswordLog(e.target.value)}}/>
                 <button onClick={login}>Login</button>
             </div>
-            <div>{loginStatus}</div>
+            {loginStatus && (
+                <div>
+                    <button onClick={userAuthenticated}>Check authentification</button>
+                    <div></div>
+                </div>
+            )}
+            
         </div>
     )
 }
