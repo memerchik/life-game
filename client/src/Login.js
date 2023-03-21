@@ -40,12 +40,26 @@ function Login() {
     }
 
     useEffect(() => {
+        let loggedin = null
         Axios.get("http://localhost:3001/login").then((res)=>{
             if(res.data.loggedin == true){
                 setLogin(true)
+                loggedin=true
             }
             else{
                 setLogin(false)
+                loggedin=false
+            }
+        })
+        .then(()=>{
+            if(loggedin==true){
+                Axios.get("http://localhost:3001/isUserAuth", {
+                    headers:{
+                        "x-access-token": localStorage.getItem("token")
+                    }
+                }).then((response)=>{
+                    console.log(response)
+                })
             }
         })
     }, [])
@@ -86,6 +100,7 @@ function Login() {
                 <div>
                     <button onClick={userAuthenticated}>Check authentification</button>
                     <button onClick={logout}>Logout</button>
+                    <a href='/'>Play game</a>
                 </div>
             )}
             

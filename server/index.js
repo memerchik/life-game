@@ -105,6 +105,7 @@ const verifyJWT = (req, res, next)=>{
         jwt.verify(token, "writeENVvariableHere", (err, decoded)=>{
             if(err){
                 res.json({
+                    err: err,
                     auth: false,
                     message: "You failed to authenticate"
                 })
