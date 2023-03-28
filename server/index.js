@@ -104,6 +104,7 @@ const verifyJWT = (req, res, next)=>{
     else{
         jwt.verify(token, "writeENVvariableHere", (err, decoded)=>{
             if(err){
+                req.session.destroy();
                 res.json({
                     err: err,
                     auth: false,
@@ -134,7 +135,9 @@ app.get("/login", (req, res)=>{ // check if user is logged in
 app.get("/logout", verifyJWT, (req, res)=>{
     req.session.destroy();
     // res.redirect('http://localhost:3000/');
-    //res.send()
+    res.json({
+        loggedOut: true
+    })
 })
 
 app.listen(PORT, ()=>{

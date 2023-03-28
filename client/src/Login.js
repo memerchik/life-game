@@ -1,3 +1,4 @@
+import './Login.css'
 import React, { useEffect, useState } from 'react'
 import Axios from 'axios'
 
@@ -80,23 +81,31 @@ function Login() {
                 "x-access-token": localStorage.getItem("token")
             }
         }).then((response)=>{
-            console.log(response)
+            if(response.data.loggedOut===true){
+                setLogin(false)
+            }
         })
     }
 
     return (
         <div className='LoginPage'>
-            <div className='Registration'>
-                <input type="text" id="regUsername" onChange={(e)=>{setUsernameReg(e.target.value)}}/>
-                <input type="text" id="regPassword" onChange={(e)=>{setPasswordReg(e.target.value)}}/>
-                <button onClick={register}>Register</button>
+            <h1 class="LoginPage__title">Login/Registration</h1>
+            {loginStatus==false && (
+            <div>
+                <div className='Registration'>
+                    <input type="text" id="regUsername" onChange={(e)=>{setUsernameReg(e.target.value)}}/>
+                    <input type="text" id="regPassword" onChange={(e)=>{setPasswordReg(e.target.value)}}/>
+                    <button onClick={register}>Register</button>
+                </div>
+                <div className='Login'>
+                    <input type="text" id="logUsername" onChange={(e)=>{setUsernameLog(e.target.value)}}/>
+                    <input type="text" id="logPassword" onChange={(e)=>{setPasswordLog(e.target.value)}}/>
+                    <button onClick={login}>Login</button>
+                </div>
             </div>
-            <div className='Login'>
-                <input type="text" id="logUsername" onChange={(e)=>{setUsernameLog(e.target.value)}}/>
-                <input type="text" id="logPassword" onChange={(e)=>{setPasswordLog(e.target.value)}}/>
-                <button onClick={login}>Login</button>
-            </div>
-            {loginStatus && (
+            )}
+            
+            {loginStatus==true && (
                 <div>
                     <button onClick={userAuthenticated}>Check authentification</button>
                     <button onClick={logout}>Logout</button>
