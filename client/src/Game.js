@@ -5,17 +5,42 @@ import React, {useState} from "react";
 import SpeedSelector from './SpeedSelector';
 import MatrixSize from './MatrixSize';
 function Game() {
-  const [mousedown, setDown]=useState(false)
-  window.onmousedown = () => {
-    setDown(true)
+  const [mousedown, setDown]=useState({
+    down: false,
+    add: false
+  })
+  window.onmousedown = (e) => {
+    let target = e.target;
+    if(target.classList.contains("yellow")){
+      setDown({
+        down: true,
+        add: false
+      })
+    }
+    else{
+      setDown({
+        down: true,
+        add: true
+      })
+    }
+    
   }
   window.onmouseup = () => {
-    setDown(false)
+    setDown({
+      down: false,
+      add: false
+    })
   }
   const [matrixSize, changeSize] = useState(20)
   const [play, setPlay] = useState(false)
   const [playSpeed, changePlaySpeed] = useState(500)
   const [gameMode, setGamemode] = useState(null)
+  const [score, setScore] = useState(0)
+  const [matrix, changeMatrix] = useState(Array(matrixSize).fill(null).map(()=>Array(matrixSize).fill(0)))
+  const [history, setHistory] = useState({
+    previous1: null,
+    previous2: null
+  })
   return (
     <div className="App">
       {gameMode==null && (
@@ -27,7 +52,8 @@ function Game() {
       )}
       {gameMode=="single" && (
       <div>
-        <Table play={play} playSpeed={playSpeed} matrixSize={matrixSize} down={mousedown}/>
+        <h1>Your score: {score}</h1>
+        <Table play={play} playSpeed={playSpeed} matrixSize={matrixSize} down={mousedown} setScore={setScore} matrix={matrix} changeMatrix={changeMatrix} history={history} setHistory={setHistory}/>
         <StartBtn play={play} changePlay={setPlay}/>
         <SpeedSelector playSpeed={playSpeed} changePlaySpeed={changePlaySpeed}/>
         <MatrixSize ThisMatrixSize={matrixSize} changeSize={changeSize}/>

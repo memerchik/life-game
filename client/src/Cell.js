@@ -19,9 +19,13 @@ function Cell({type, number, click, matrixSize, col, cellRow, down}) {
     }
 
     function onHover(){
-        if(down&&alive==false){
+        if(down.down==true&&down.add==true&&alive==false){
             alive=true
             click(row, column, "setAlive")
+        }
+        else if(down.down==true&&down.add==false&&alive==true){
+            alive=false
+            click(row, column, "setDead")
         }
     }
 

@@ -43,7 +43,6 @@ const db = mysql.createConnection({
 
 app.post('/register', (req, res)=>{
     const username = req.body.username
-    const password = req.body.password
     bcrypt.hash(req.body.password, saltRounds, (err, hash)=>{
         if(err){
             console.log(err)
@@ -77,7 +76,7 @@ app.post('/login', (req, res)=>{
                 
                     const id = result[0].id
                     const token = jwt.sign({id}, "writeENVvariableHere", {
-                        expiresIn: 300,
+                        expiresIn: "1d",
                     })
 
                     req.session.user = result

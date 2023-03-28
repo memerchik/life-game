@@ -3,8 +3,8 @@ import Cell from './Cell';
 import React, {useState, useEffect} from "react";
 
 
-function Table({play, playSpeed, matrixSize, down}) {
-    const [matrix, changeMatrix] = useState(Array(matrixSize).fill(null).map(()=>Array(matrixSize).fill(0)))
+function Table({play, playSpeed, matrixSize, down, setScore, matrix, changeMatrix, history, setHistory}) {
+    
 
     const [key, setKey] = useState(1) // render
 
@@ -246,7 +246,7 @@ function Table({play, playSpeed, matrixSize, down}) {
         }, playSpeed);
         
         if(play==true){
-            return ()=> clearInterval(interval);
+            return () => clearInterval(interval);
         }
         else{
             clearInterval(interval);
@@ -265,7 +265,6 @@ function Table({play, playSpeed, matrixSize, down}) {
             })
         })
         changeMatrix(newMatrix)
-        console.log(newMatrix)
     }, [matrixSize])
 
     //function
@@ -334,6 +333,15 @@ function Table({play, playSpeed, matrixSize, down}) {
             if(neighbours.length==2||neighbours.length==3){
                 newMatrix[thisCell.row][thisCell.column]=1
             }
+        })
+        if(newMatrix == matrix || newMatrix==history.previous2){
+            console.log("REPEATING")
+        }
+        console.log(newMatrix)
+
+        setHistory({
+            previous1: matrix,
+            previous2: history.previous1
         })
         changeMatrix(newMatrix)
     }
