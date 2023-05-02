@@ -13,11 +13,11 @@ ALTER TABLE
 CREATE TABLE `multiplayer`(
     `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `player1` BIGINT NOT NULL,
-    `player2` BIGINT NOT NULL,
+    `player2` BIGINT,
     `player1status` VARCHAR(255) NOT NULL,
-    `player2status` VARCHAR(255) NOT NULL,
-    `player1score` INT NOT NULL,
-    `player2score` INT NOT NULL
+    `player2status` VARCHAR(255),
+    `player1score` INT,
+    `player2score` INT
 );
 
 ALTER TABLE

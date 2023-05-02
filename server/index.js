@@ -139,6 +139,22 @@ app.get("/logout", verifyJWT, (req, res)=>{
     })
 })
 
+app.get("/createGame", (req, res)=>{
+    
+    //check if game exists
+    db.query("SELECT * FROM `multiplayer` WHERE player1=1 AND player2 IS NULL", req.session.username, (err, result)=>{
+        if(err){
+            res.send(err)
+        }
+        else if(result.length>0){
+            res.send(result)
+        }
+        else{
+            res.send({message: "User doesn't exist"})
+        }
+    })
+})
+
 app.listen(PORT, ()=>{
     console.log("server running on port "+PORT)
 })
