@@ -11,7 +11,7 @@ ALTER TABLE
     `users` ADD UNIQUE `users_username_unique`(`username`);
 
 CREATE TABLE `multiplayer`(
-    `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
     `player1` BIGINT NOT NULL,
     `player2` BIGINT,
     `player1status` VARCHAR(255) NOT NULL,

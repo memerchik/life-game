@@ -145,9 +145,8 @@ app.get("/createGame", (req, res)=>{
         data: null
     }
     let userdata = req.session.user[0]
-    console.log(userdata)
     //check if game exists
-    db.query("SELECT * FROM `multiplayer` WHERE player1=? AND player2 IS NULL", userdata.id, (err, result)=>{
+    db.query("SELECT * FROM `multiplayer` WHERE player1=? AND player2 IS NULL", userdata.id, function(err, result){
         if(err){
             res.send(err)
         }
@@ -157,8 +156,23 @@ app.get("/createGame", (req, res)=>{
             res.send(responseModel)
         }
         else if(result.length==0){
+            db.query("INSERT INTO `multiplayer` (`id`, `player1`, `player2`, `player1status`, `player2status`, `player1score`, `player2score`) VALUES (NULL, ?, NULL, 'Preparing', NULL, NULL, NULL);", userdata.id, (errr, ress)=>{
+                //console.log(ress, errr)
+            })
+            //console.log(lastId)
             responseModel.message = "gameCreated"
-            res.send(responseModel)
+            db.query("SELECT * FROM `multiplayer` WHERE player1=?", userdata.id, (errr, ress)=>{
+                let t = ress[0]
+                t=JSON.parse(JSON.stringify(t))
+                console.log(t, "RESULT")
+                if(errr){
+                    responseModel.data=errr
+                }
+                else{
+                    responseModel.data=t
+                }
+                res.send(responseModel)
+            })
         }
         else{
             res.send({message: "User doesn't exist"})

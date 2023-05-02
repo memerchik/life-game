@@ -1,10 +1,12 @@
 import './App.css';
 import Table from './Table'
+import Axios from 'axios'
 import StartBtn from './StartBtn';
 import React, {useState, useEffect} from "react";
 import SpeedSelector from './SpeedSelector';
 import MatrixSize from './MatrixSize';
 function Game() {
+  Axios.defaults.withCredentials = true;
   const [mousedown, setDown]=useState({
     down: false,
     add: false
@@ -42,13 +44,23 @@ function Game() {
     previousFilled2: null
 })
   const [mp, setMP] = useState(null)
+  const [mpSettings, setMpSettings] = useState({
+
+  })
+  const [ready, setReady] = useState(false)
   const [playSpeed, changePlaySpeed] = useState(500)
   const [gameMode, setGamemode] = useState(null)
   const [score, setScore] = useState(0)
   const [matrix, changeMatrix] = useState(Array(matrixSize).fill(null).map(()=>Array(matrixSize).fill(0)))
   useEffect(() => {
     if(mp==="AttemptHost"){
-      alert("a")
+      Axios.get("http://localhost:3001/createGame").then((res)=>{
+        let r=res.data
+        if(r.message == "gameExists" || r.message == "gameCreated"){
+          setMpSettings(r.data)
+        }
+        setMP("ready")
+      })
     }
   }, [mp])
   
@@ -82,13 +94,12 @@ function Game() {
             <input placeholder="gameid"></input>
           </div>
           )}
-          {mp === "host" && (
+          {mp === "ready" && (
           <div>
+            {JSON.stringify(mpSettings)}
             <h1>Your score: {score}</h1>
             <Table play={play} changePlay={setPlay} playSpeed={playSpeed} matrixSize={matrixSize} down={mousedown} setScore={setScore} matrix={matrix} changeMatrix={changeMatrix} history={history} setHistory={setHistory}/>
             <StartBtn play={play} changePlay={setPlay} setScore={setScore} changeMatrix={changeMatrix} matrixSize={matrixSize} setHistory={setHistory} matrix={matrix}/>
-            <SpeedSelector playSpeed={playSpeed} changePlaySpeed={changePlaySpeed}/>
-            <MatrixSize ThisMatrixSize={matrixSize} changeSize={changeSize}/>
             <button onClick={()=>setGamemode(null)}>Return</button>
           </div>
           )}
