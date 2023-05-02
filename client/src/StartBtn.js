@@ -1,14 +1,33 @@
 import './App.css';
 import React, {useState} from "react";
-function StartBtn({play, changePlay, changeMatrix, matrixSize}) {
+function StartBtn({play, setScore, changePlay, changeMatrix, matrixSize, setHistory, matrix}) {
   function switchPlay(){
     if(play.playState==false && play.startedBefore==false){
       changePlay({
         playState: true,
         startedBefore: true
       })
+      let filledCells2 = []
+
+      matrix.map((matrixRow, ind1)=>{
+          matrixRow.map((filled, ind2)=>{
+              if(filled==1){
+                  filledCells2.push({
+                      row: ind1,
+                      column: ind2
+                  })
+              }
+          })
+      })
+      let h2 = {
+        currentFilled: filledCells2,
+        previousFilled1: null,
+        previousFilled2: null
+      }
+      setHistory(h2)
+      console.log(h2)
     }
-    else if (play.playState==true && playState.startedBefore==true){
+    else if (play.playState==true && play.startedBefore==true){
       changePlay({
         playState: false,
         startedBefore: true
@@ -21,6 +40,12 @@ function StartBtn({play, changePlay, changeMatrix, matrixSize}) {
       })
       let newMatrix = Array(matrixSize).fill(null).map(()=>Array(matrixSize).fill(0))
       changeMatrix(newMatrix)
+      setHistory({
+        currentFilled: null,
+        previousFilled1: null,
+        previousFilled2: null
+      })
+      setScore(0)
     }
   }
   return (

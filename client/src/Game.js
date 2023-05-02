@@ -36,6 +36,11 @@ function Game() {
     playState: false,
     startedBefore: false
   })
+  const [history, setHistory] = useState({
+    currentFilled: null,
+    previousFilled1: null,
+    previousFilled2: null
+})
   const [playSpeed, changePlaySpeed] = useState(500)
   const [gameMode, setGamemode] = useState(null)
   const [score, setScore] = useState(0)
@@ -53,8 +58,8 @@ function Game() {
       {gameMode=="single" && (
       <div>
         <h1>Your score: {score}</h1>
-        <Table play={play} playSpeed={playSpeed} matrixSize={matrixSize} down={mousedown} setScore={setScore} matrix={matrix} changeMatrix={changeMatrix}/>
-        <StartBtn play={play} changePlay={setPlay} changeMatrix={changeMatrix} matrixSize={matrixSize}/>
+        <Table play={play} changePlay={setPlay} playSpeed={playSpeed} matrixSize={matrixSize} down={mousedown} setScore={setScore} matrix={matrix} changeMatrix={changeMatrix} history={history} setHistory={setHistory}/>
+        <StartBtn play={play} changePlay={setPlay} setScore={setScore} changeMatrix={changeMatrix} matrixSize={matrixSize} setHistory={setHistory} matrix={matrix}/>
         <SpeedSelector playSpeed={playSpeed} changePlaySpeed={changePlaySpeed}/>
         <MatrixSize ThisMatrixSize={matrixSize} changeSize={changeSize}/>
         <button onClick={()=>setGamemode(null)}>Return</button>
