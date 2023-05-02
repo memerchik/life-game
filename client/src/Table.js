@@ -3,10 +3,15 @@ import Cell from './Cell';
 import React, {useState, useEffect} from "react";
 
 
-function Table({play, playSpeed, matrixSize, down, setScore, matrix, changeMatrix, history, setHistory}) {
+function Table({play, playSpeed, matrixSize, down, setScore, matrix, changeMatrix}) {
     
 
     const [key, setKey] = useState(1) // render
+    const [history, setHistory] = useState({
+        currentFilled: null,
+        previousFilled1: null,
+        previousFilled2: null
+    })
 
     function countNeighbours(cellRow, cellColumn){
         let neighboursArr=[];
@@ -240,12 +245,32 @@ function Table({play, playSpeed, matrixSize, down, setScore, matrix, changeMatri
 
     //Play/Stop switch
     useEffect(() => {
-        setKey((key)=>key+1)
         const interval = setInterval(() => {
+            
             processMatrix(matrix)
         }, playSpeed);
         
         if(play==true){
+            let filledCells = []
+
+            matrix.map((matrixRow, ind1)=>{
+                matrixRow.map((filled, ind2)=>{
+                    if(filled==1){
+                        filledCells.push({
+                            row: ind1,
+                            column: ind2
+                        })
+                    }
+                })
+            })
+            let h = history
+            setHistory({
+                currentFilled: filledCells,
+                previousFilled1: h.currentFilled,
+                previousFilled2: h.previousFilled1
+            })
+
+
             return () => clearInterval(interval);
         }
         else{
@@ -270,6 +295,7 @@ function Table({play, playSpeed, matrixSize, down, setScore, matrix, changeMatri
     //function
 
     function processMatrix(matrix){
+        
         let newMatrix = Array(matrixSize).fill(null).map(()=>Array(matrixSize).fill(0))
         matrix.map((matrixRow, ind1)=>{
             matrixRow.map((filled, ind2)=>{
@@ -334,16 +360,19 @@ function Table({play, playSpeed, matrixSize, down, setScore, matrix, changeMatri
                 newMatrix[thisCell.row][thisCell.column]=1
             }
         })
-        if(newMatrix == matrix || newMatrix==history.previous2){
-            console.log("REPEATING")
-        }
-        console.log(newMatrix)
 
-        setHistory({
-            previous1: matrix,
-            previous2: history.previous1
-        })
+        let newHistory = {
+            currentFilled: filledCells,
+            previousFilled1: history.currentFilled,
+            previousFilled2: history.previousFilled1
+        }
+        setHistory(newHistory)
+        console.log(newHistory)
+        
         changeMatrix(newMatrix)
+        
+        
+        
     }
 
     return (

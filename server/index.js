@@ -38,7 +38,7 @@ const db = mysql.createConnection({
     user: "root",
     host: "localhost",
     password: "",
-    database: "logindb"
+    database: "lifegame"
 })
 
 app.post('/register', (req, res)=>{
