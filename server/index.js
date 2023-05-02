@@ -140,14 +140,25 @@ app.get("/logout", verifyJWT, (req, res)=>{
 })
 
 app.get("/createGame", (req, res)=>{
-    
+    let responseModel = {
+        message: null,
+        data: null
+    }
+    let userdata = req.session.user[0]
+    console.log(userdata)
     //check if game exists
-    db.query("SELECT * FROM `multiplayer` WHERE player1=1 AND player2 IS NULL", req.session.username, (err, result)=>{
+    db.query("SELECT * FROM `multiplayer` WHERE player1=? AND player2 IS NULL", userdata.id, (err, result)=>{
         if(err){
             res.send(err)
         }
         else if(result.length>0){
-            res.send(result)
+            responseModel.message = "gameExists"
+            responseModel.data = result[0]
+            res.send(responseModel)
+        }
+        else if(result.length==0){
+            responseModel.message = "gameCreated"
+            res.send(responseModel)
         }
         else{
             res.send({message: "User doesn't exist"})
