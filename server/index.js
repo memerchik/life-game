@@ -139,7 +139,7 @@ app.get("/logout", verifyJWT, (req, res)=>{
     })
 })
 
-app.get("/createGame", (req, res)=>{
+app.get("/createGame", verifyJWT, (req, res)=>{
     let responseModel = {
         message: null,
         data: null
@@ -178,6 +178,94 @@ app.get("/createGame", (req, res)=>{
             res.send({message: "User doesn't exist"})
         }
     })
+})
+
+app.get("/joinGame", verifyJWT, (req, res)=>{
+    let responseModel = {
+        message: null,
+        data: null
+    }
+    let userdata = req.session.user[0]
+    //check if game exists
+    db.query("SELECT * FROM `multiplayer` WHERE player1=? AND player2 IS NULL", userdata.id, function(err, result){
+        if(err){
+            res.send(err)
+        }
+        else if(result.length>0){
+            responseModel.message = "gameExists"
+            responseModel.data = result[0]
+            res.send(responseModel)
+        }
+        else if(result.length==0){
+            db.query("INSERT INTO `multiplayer` (`id`, `player1`, `player2`, `player1status`, `player2status`, `player1score`, `player2score`) VALUES (NULL, ?, NULL, 'Preparing', NULL, NULL, NULL);", userdata.id, (errr, ress)=>{
+                //console.log(ress, errr)
+            })
+            //console.log(lastId)
+            responseModel.message = "gameCreated"
+            db.query("SELECT * FROM `multiplayer` WHERE player1=?", userdata.id, (errr, ress)=>{
+                let t = ress[0]
+                t=JSON.parse(JSON.stringify(t))
+                console.log(t, "RESULT")
+                if(errr){
+                    responseModel.data=errr
+                }
+                else{
+                    responseModel.data=t
+                }
+                res.send(responseModel)
+            })
+        }
+        else{
+            res.send({message: "User doesn't exist"})
+        }
+    })
+})
+
+app.post("/play", (req, res)=>{
+    let userdata = req.session.user[0]
+    switch(req.body.action){
+        case "getInfo":
+            db.query("SELECT * FROM `multiplayer` WHERE id=?", req.body.gameId, (errr, ress)=>{
+                if(errr){
+                    res.send(errr)
+                }
+                else{
+                    res.send(ress)
+                }
+            })
+            break;
+        case "setReady":
+            let p = "";
+            let gameid = "";
+            db.query("SELECT id FROM `multiplayer` WHERE player1=? OR player2=?", [userdata.id, userdata.id], (errr, ress)=>{
+                gameid=ress[0].id
+                db.query("SELECT player1, player2 FROM `multiplayer` WHERE id=?", gameid, (errr, ress)=>{
+                    //let a = JSON.parse(JSON.stringify(ress[0]))
+                    if(errr){
+                        console.log(errr)
+                    }
+                    else{
+                        let a = JSON.parse(JSON.stringify(ress[0]))
+                        if(a.player1 == userdata.id){
+                            p="1"
+                        }
+                        else{
+                            p="2"
+                        }
+                        db.query("UPDATE `multiplayer` SET player"+p+"status='Ready' WHERE id=?", gameid, (errr, ress)=>{
+                            if(errr){
+                                res.send(errr)
+                            }
+                            else{
+                                res.send("updated")
+                            }
+                        })
+                    }
+                    
+                })
+            })
+    }
+    
 })
 
 app.listen(PORT, ()=>{

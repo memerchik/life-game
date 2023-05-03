@@ -1,11 +1,13 @@
 import './App.css';
 import React, {useState} from "react";
-function ReadyBtn({play, setScore, changePlay, changeMatrix, matrixSize, setHistory, matrix}) {
+import Axios from 'axios'
+function ReadyBtn({play, changePlay, setHistory, matrix}) {
   function switchPlay(){
-    if(play.playState==false && play.startedBefore==false){
+    if(play.playState==false && play.startedBefore==false && play.multiplayerLock == false){
       changePlay({
-        playState: true,
-        startedBefore: true
+        playState: false,
+        startedBefore: false,
+        multiplayerLock: true
       })
       let filledCells2 = []
 
@@ -25,32 +27,19 @@ function ReadyBtn({play, setScore, changePlay, changeMatrix, matrixSize, setHist
         previousFilled2: null
       }
       setHistory(h2)
-      console.log(h2)
-    }
-    else if (play.playState==true && play.startedBefore==true){
-      changePlay({
-        playState: false,
-        startedBefore: true
+      Axios.post("http://localhost:3001/play", {
+        action: "setReady",
+
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        },
+
       })
-    }
-    else if (play.playState==false && play.startedBefore==true){
-      changePlay({
-        playState: false,
-        startedBefore: false
-      })
-      let newMatrix = Array(matrixSize).fill(null).map(()=>Array(matrixSize).fill(0))
-      changeMatrix(newMatrix)
-      setHistory({
-        currentFilled: null,
-        previousFilled1: null,
-        previousFilled2: null
-      })
-      setScore(0)
     }
   }
   return (
     <div className="StartBtn">
-      <button onClick={()=>switchPlay()}>{play.playState == true && play.startedBefore==true ? "Pause" : (play.playState==false && play.startedBefore ==false ? "Start" : "Restart")}</button>
+      <button onClick={()=>switchPlay()}>{play.playState==true ? "Playing" : (play.playState==false && play.multiplayerLock == true ? "Waiting for other player" : (play.playState==false && play.multiplayerLock == false) ? "Ready" : "ERROR")}</button>
     </div>
   );
 

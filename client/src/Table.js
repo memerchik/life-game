@@ -221,7 +221,7 @@ function Table({play, changePlay, playSpeed, matrixSize, down, setScore, matrix,
 
     
     function changeCellBeforeStart(cellRow, cellColumn, action){
-        if(play.playState==true || play.startedBefore==true){
+        if(play.playState==true || play.startedBefore==true || play.multiplayerLock == true){
             return
         }
         //console.log("row:",cellRow, "column:", cellColumn, "action", action)
@@ -248,26 +248,6 @@ function Table({play, changePlay, playSpeed, matrixSize, down, setScore, matrix,
         }, playSpeed);
         
         if(play.playState==true){
-            // let filledCells = []
-
-            // matrix.map((matrixRow, ind1)=>{
-            //     matrixRow.map((filled, ind2)=>{
-            //         if(filled==1){
-            //             filledCells.push({
-            //                 row: ind1,
-            //                 column: ind2
-            //             })
-            //         }
-            //     })
-            // })
-            // let h = history
-            // setHistory({
-            //     currentFilled: filledCells,
-            //     previousFilled1: h.currentFilled,
-            //     previousFilled2: h.previousFilled1
-            // })
-
-
             return () => clearInterval(interval);
         }
         else{
