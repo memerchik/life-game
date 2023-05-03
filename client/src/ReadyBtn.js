@@ -36,10 +36,20 @@ function ReadyBtn({play, changePlay, setHistory, matrix}) {
 
       })
     }
+    
+    else if(play.playState==false && play.startedBefore==true && play.multiplayerLock==true){
+      Axios.post("http://localhost:3001/deleteGame", {
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        },
+
+      })
+    }
+    console.log(play)
   }
   return (
     <div className="StartBtn">
-      <button onClick={()=>switchPlay()}>{play.playState==true ? "Playing" : (play.playState==false && play.multiplayerLock == true ? "Waiting for other player" : (play.playState==false && play.multiplayerLock == false) ? "Ready" : "ERROR")}</button>
+      <button onClick={()=>switchPlay()}>{play.playState==true ? "Playing" : (play.playState==false && play.multiplayerLock == true ? "Waiting for other player" : (play.playState==false && play.multiplayerLock == false) ? "Ready" : "Finish")}</button>
     </div>
   );
 

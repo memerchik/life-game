@@ -357,14 +357,12 @@ function Table({play, changePlay, playSpeed, matrixSize, down, setScore, matrix,
         }
         
         setHistory(h2)
-        console.log(h2)
         
         // score
 
         if(h2.previousFilled1!=null){
             let increasedScore = 0
             let prevFilled = h2.previousFilled1
-            console.log(prevFilled)
             filledCells2.map((val, ind)=>{
                 const isFound = prevFilled.some(element => {
                     if (element.row === val.row && element.column === val.column) {
@@ -375,7 +373,6 @@ function Table({play, changePlay, playSpeed, matrixSize, down, setScore, matrix,
                 });
                 if(!isFound){
                     increasedScore++
-                    console.log(val)
                 }
             })
             setScore((current)=>current+increasedScore)

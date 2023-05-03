@@ -34,6 +34,8 @@ function Game() {
       add: false
     })
   }
+  const [key, setKey] = useState(0)
+  const [prevscore, setPrev] = useState(0)
   const [matrixSize, changeSize] = useState(20)
   const [play, setPlay] = useState({
     playState: false,
@@ -47,8 +49,15 @@ function Game() {
 })
   const [mp, setMP] = useState(null)
   const [mpSettings, setMpSettings] = useState({
-
+    id: null,
+    player1: null,
+    player1status: null,
+    player1score: null,
+    player2: null,
+    player2status: null,
+    player2score: null,
   })
+  const [gameidtojoin, setgidj] = useState(null)
   const [ready, setReady] = useState(false)
   const [playSpeed, changePlaySpeed] = useState(500)
   const [gameMode, setGamemode] = useState(null)
@@ -65,25 +74,95 @@ function Game() {
         if(r.message == "gameExists" || r.message == "gameCreated"){
           setMpSettings(r.data)
         }
-        setMP("ready")
-
-        const interval = setInterval(() => {
         
+
+        const interval=setInterval(() => {
           Axios.post("http://localhost:3001/play", {
             action: "getInfo",
             gameId: r.data.id,
             headers:{
               "x-access-token": localStorage.getItem("token")
             },
-            
           }).then((res)=>{
             setMpSettings(res.data[0])
           })
-          
         }, 1000);
+        
+        setMP("ready")
+        
+      })
+    }
+    else if(mp==="AttemptJoin" && gameidtojoin!=null){
+      Axios.post("http://localhost:3001/joinGame", {
+        gameid: gameidtojoin,
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        }
+      }).then((res)=>{
+        let r=res.data
+        if(r.message == "joined"){
+          setMpSettings(r.data)
+        }
+
+        const interval=setInterval(() => {
+          Axios.post("http://localhost:3001/play", {
+            action: "getInfo",
+            gameId: r.data.id,
+            headers:{
+              "x-access-token": localStorage.getItem("token")
+            },
+          }).then((res)=>{
+              setMpSettings(res.data[0])
+          
+          })
+        }, 1000);
+        
+        setMP("ready")
       })
     }
   }, [mp])
+
+  useEffect(()=>{
+    if(mpSettings.player1status=="Ready" && mpSettings.player2status=="Ready"){
+      setPlay({
+        playState: true,
+        startedBefore: true,
+        multiplayerLock: true
+      })
+      mpSettings.player1status="Playing"
+      mpSettings.player2status="Playing"
+      setTimeout(()=>{
+        Axios.post("http://localhost:3001/play", {
+          action: "startGame",
+          headers:{
+            "x-access-token": localStorage.getItem("token")
+          },
+        })
+      }, 1000)
+      
+    }
+  }, [mpSettings])
+
+  useEffect(()=>{
+    if(score==prevscore){
+      return
+    }
+    if(mpSettings.player1status=="Playing"){
+      console.log(score, "score")
+      Axios.post("http://localhost:3001/play", {
+        action: "scoreSubmit",
+        gameId: mpSettings.id,
+        score: score,
+        headers:{
+          "x-access-token": localStorage.getItem("token")
+        },
+        
+      }).then((ress)=>{
+        setMpSettings(ress.data[0])
+        setPrev(score)
+      })
+    }
+  }, [mpSettings, score, prevscore])
 
   function resetMP(){
     setGamemode(null)
@@ -128,7 +207,7 @@ function Game() {
             <h1>Multiplayer</h1>
             <button onClick={()=>setMP("AttemptHost")}>Create a game</button>
             <button onClick={()=>setMP("AttemptJoin")}>Join a game</button>
-            <input placeholder="gameid"></input>
+            <input placeholder="gameid" onChange={(e)=>{setgidj(e.target.value)}}></input>
           </div>
           )}
           {mp === "ready" && (
