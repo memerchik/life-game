@@ -16,7 +16,7 @@ const PORT = 3001
 
 app.use(express.json());
 app.use(cors({
-    origin: "*",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     credentials: true
 }));
@@ -36,7 +36,7 @@ app.use(session({
 
 const db = mysql.createConnection({
     user: "root",
-    host: "192.168.6.17",
+    host: "localhost",
     password: "",
     database: "lifegame"
 })
@@ -133,7 +133,7 @@ app.get("/login", (req, res)=>{ // check if user is logged in
 
 app.get("/logout", verifyJWT, (req, res)=>{
     req.session.destroy();
-    // res.redirect('http://192.168.6.17:3000/');
+    // res.redirect('http://localhost:3000/');
     res.json({
         loggedOut: true
     })

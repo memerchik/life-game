@@ -67,7 +67,7 @@ function Game() {
   const [clearint, setclearint] = useState("")
   useEffect(() => {
     if(mp==="AttemptHost"){
-      Axios.get("http://192.168.6.17:3001/createGame", {
+      Axios.get("http://localhost:3001/createGame", {
         headers:{
           "x-access-token": localStorage.getItem("token")
         }
@@ -79,7 +79,7 @@ function Game() {
         
 
         intervalref.current=setInterval(() => {
-          Axios.post("http://192.168.6.17:3001/play", {
+          Axios.post("http://localhost:3001/play", {
             action: "getInfo",
             gameId: r.data.id,
             headers:{
@@ -98,7 +98,7 @@ function Game() {
       })
     }
     else if(mp==="AttemptJoin" && gameidtojoin!=null){
-      Axios.post("http://192.168.6.17:3001/joinGame", {
+      Axios.post("http://localhost:3001/joinGame", {
         gameid: gameidtojoin,
         headers:{
           "x-access-token": localStorage.getItem("token")
@@ -110,7 +110,7 @@ function Game() {
         }
 
         intervalref.current=setInterval(() => {
-          Axios.post("http://192.168.6.17:3001/play", {
+          Axios.post("http://localhost:3001/play", {
             action: "getInfo",
             gameId: r.data.id,
             headers:{
@@ -141,7 +141,7 @@ function Game() {
       mpSettings.player1status="Playing"
       mpSettings.player2status="Playing"
       setTimeout(()=>{
-        Axios.post("http://192.168.6.17:3001/play", {
+        Axios.post("http://localhost:3001/play", {
           action: "startGame",
           headers:{
             "x-access-token": localStorage.getItem("token")
@@ -158,7 +158,7 @@ function Game() {
     }
     if(mpSettings.player1status=="Playing"){
       console.log(score, "score")
-      Axios.post("http://192.168.6.17:3001/play", {
+      Axios.post("http://localhost:3001/play", {
         action: "scoreSubmit",
         gameId: mpSettings.id,
         score: score,
@@ -187,7 +187,7 @@ function Game() {
       previousFilled1: null,
       previousFilled2: null
     })
-    Axios.post("http://192.168.6.17:3001/deleteGame", {
+    Axios.post("http://localhost:3001/deleteGame", {
       headers:{
         "x-access-token": localStorage.getItem("token")
       },

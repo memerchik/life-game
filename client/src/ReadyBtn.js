@@ -27,7 +27,7 @@ function ReadyBtn({play, changePlay, setHistory, matrix}) {
         previousFilled2: null
       }
       setHistory(h2)
-      Axios.post("http://192.168.6.17:3001/play", {
+      Axios.post("http://localhost:3001/play", {
         action: "setReady",
 
         headers:{

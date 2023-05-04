@@ -8,7 +8,7 @@ function SpeedSelector({playSpeed, changePlaySpeed}) {
     return (
     <div className="Speed">
         <p>Current speed: {playSpeed/1000} s</p>
-        <input type="range" onChange={()=>speedChange()} min={100} max={2000} step={100} value={playSpeed} ref={a}></input>
+        <input type="range" onChange={()=>speedChange()} min={10} max={2000} step={10} value={playSpeed} ref={a}></input>
     </div>
     );
 
