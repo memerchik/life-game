@@ -16,7 +16,7 @@ const PORT = 3001
 
 app.use(express.json());
 app.use(cors({
-    origin: ["http://localhost:3000"],
+    origin: "*",
     methods: ["GET", "POST"],
     credentials: true
 }));
@@ -36,7 +36,7 @@ app.use(session({
 
 const db = mysql.createConnection({
     user: "root",
-    host: "localhost",
+    host: "192.168.6.17",
     password: "",
     database: "lifegame"
 })
@@ -133,7 +133,7 @@ app.get("/login", (req, res)=>{ // check if user is logged in
 
 app.get("/logout", verifyJWT, (req, res)=>{
     req.session.destroy();
-    // res.redirect('http://localhost:3000/');
+    // res.redirect('http://192.168.6.17:3000/');
     res.json({
         loggedOut: true
     })
@@ -341,12 +341,25 @@ app.post("/play", (req, res)=>{
 })
 
 app.post("/deleteGame", (req, res)=>{
+    console.log("del")
     let userdata = req.session.user[0]
+    let player1 = "";
     let gameidd = "";
-    db.query("SELECT id, player1status, player2status FROM `multiplayer` WHERE player1=? OR player2=?", [userdata.id, userdata.id], function(errr, ress){
-        gameidd=ress[0].id
-        if(ress[0].player1status=="Finished" && ress[0].player2status=="Finished"){
-            db.query("DELETE FROM `multiplayer` WHERE id = ?", gameidd)
+    db.query("SELECT id, player1status, player2status, player1, player2 FROM `multiplayer` WHERE player1=? OR player2=?", [userdata.id, userdata.id], function(errr, ress){
+        let a = JSON.parse(JSON.stringify(ress[0]))
+        gameidd=a.id
+        
+        if(a.player1 == userdata.id){
+            player1="1"
+        }
+        else{
+            player1="2"
+        }
+        if(player1=="1"){
+            db.query("DELETE FROM `multiplayer` WHERE id = ?", gameidd, (reqqq, resss)=>{
+                res.send("deleted the game")
+            })
+            
         }
     })
 })

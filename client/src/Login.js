@@ -14,7 +14,7 @@ function Login() {
     Axios.defaults.withCredentials = true;
 
     const register = () => {
-        Axios.post("http://localhost:3001/register",
+        Axios.post("http://192.168.6.17:3001/register",
         {
             username: usernameReg,
             password: passwordReg
@@ -24,7 +24,7 @@ function Login() {
     }
 
     const login = () => {
-        Axios.post("http://localhost:3001/login",
+        Axios.post("http://192.168.6.17:3001/login",
         {
             username: usernameLog,
             password: passwordLog
@@ -42,7 +42,7 @@ function Login() {
 
     useEffect(() => {
         let loggedin = null
-        Axios.get("http://localhost:3001/login").then((res)=>{
+        Axios.get("http://192.168.6.17:3001/login").then((res)=>{
             if(res.data.loggedin == true){
                 setLogin(true)
                 loggedin=true
@@ -54,7 +54,7 @@ function Login() {
         })
         .then(()=>{
             if(loggedin==true){
-                Axios.get("http://localhost:3001/isUserAuth", {
+                Axios.get("http://192.168.6.17:3001/isUserAuth", {
                     headers:{
                         "x-access-token": localStorage.getItem("token")
                     }
@@ -66,7 +66,7 @@ function Login() {
     }, [])
 
     const userAuthenticated = () => {
-        Axios.get("http://localhost:3001/isUserAuth", {
+        Axios.get("http://192.168.6.17:3001/isUserAuth", {
             headers:{
                 "x-access-token": localStorage.getItem("token")
             }
@@ -76,7 +76,7 @@ function Login() {
     }
 
     const logout = ()=>{
-        Axios.get("http://localhost:3001/logout", {
+        Axios.get("http://192.168.6.17:3001/logout", {
             headers:{
                 "x-access-token": localStorage.getItem("token")
             }

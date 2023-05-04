@@ -2,7 +2,7 @@ import './App.css';
 import Table from './Table'
 import Axios from 'axios'
 import StartBtn from './StartBtn';
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import SpeedSelector from './SpeedSelector';
 import MatrixSize from './MatrixSize';
 import ReadyBtn from './ReadyBtn';
@@ -63,9 +63,11 @@ function Game() {
   const [gameMode, setGamemode] = useState(null)
   const [score, setScore] = useState(0)
   const [matrix, changeMatrix] = useState(Array(matrixSize).fill(null).map(()=>Array(matrixSize).fill(0)))
+  const intervalref = useRef();
+  const [clearint, setclearint] = useState("")
   useEffect(() => {
     if(mp==="AttemptHost"){
-      Axios.get("http://localhost:3001/createGame", {
+      Axios.get("http://192.168.6.17:3001/createGame", {
         headers:{
           "x-access-token": localStorage.getItem("token")
         }
@@ -76,8 +78,8 @@ function Game() {
         }
         
 
-        const interval=setInterval(() => {
-          Axios.post("http://localhost:3001/play", {
+        intervalref.current=setInterval(() => {
+          Axios.post("http://192.168.6.17:3001/play", {
             action: "getInfo",
             gameId: r.data.id,
             headers:{
@@ -89,11 +91,14 @@ function Game() {
         }, 1000);
         
         setMP("ready")
+        return ()=>{
+          clearInterval(intervalref.current)
+        }
         
       })
     }
     else if(mp==="AttemptJoin" && gameidtojoin!=null){
-      Axios.post("http://localhost:3001/joinGame", {
+      Axios.post("http://192.168.6.17:3001/joinGame", {
         gameid: gameidtojoin,
         headers:{
           "x-access-token": localStorage.getItem("token")
@@ -104,8 +109,8 @@ function Game() {
           setMpSettings(r.data)
         }
 
-        const interval=setInterval(() => {
-          Axios.post("http://localhost:3001/play", {
+        intervalref.current=setInterval(() => {
+          Axios.post("http://192.168.6.17:3001/play", {
             action: "getInfo",
             gameId: r.data.id,
             headers:{
@@ -116,9 +121,13 @@ function Game() {
           
           })
         }, 1000);
-        
+                        
         setMP("ready")
+        return ()=>{
+          clearInterval(intervalref.current)
+        }
       })
+      
     }
   }, [mp])
 
@@ -132,7 +141,7 @@ function Game() {
       mpSettings.player1status="Playing"
       mpSettings.player2status="Playing"
       setTimeout(()=>{
-        Axios.post("http://localhost:3001/play", {
+        Axios.post("http://192.168.6.17:3001/play", {
           action: "startGame",
           headers:{
             "x-access-token": localStorage.getItem("token")
@@ -149,7 +158,7 @@ function Game() {
     }
     if(mpSettings.player1status=="Playing"){
       console.log(score, "score")
-      Axios.post("http://localhost:3001/play", {
+      Axios.post("http://192.168.6.17:3001/play", {
         action: "scoreSubmit",
         gameId: mpSettings.id,
         score: score,
@@ -178,7 +187,22 @@ function Game() {
       previousFilled1: null,
       previousFilled2: null
     })
+    Axios.post("http://192.168.6.17:3001/deleteGame", {
+      headers:{
+        "x-access-token": localStorage.getItem("token")
+      },
+    })
+    .then(()=>{
+      alert("a")
+      setclearint("clear")
+    })    
   }
+  useEffect(()=>{
+    if(clearint=="clear"){
+      clearInterval(intervalref.current)
+      setclearint("")
+    }
+  }, [clearint])
   
   
   return (

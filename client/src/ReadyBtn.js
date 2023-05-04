@@ -27,7 +27,7 @@ function ReadyBtn({play, changePlay, setHistory, matrix}) {
         previousFilled2: null
       }
       setHistory(h2)
-      Axios.post("http://localhost:3001/play", {
+      Axios.post("http://192.168.6.17:3001/play", {
         action: "setReady",
 
         headers:{
@@ -36,16 +36,6 @@ function ReadyBtn({play, changePlay, setHistory, matrix}) {
 
       })
     }
-    
-    else if(play.playState==false && play.startedBefore==true && play.multiplayerLock==true){
-      Axios.post("http://localhost:3001/deleteGame", {
-        headers:{
-          "x-access-token": localStorage.getItem("token")
-        },
-
-      })
-    }
-    console.log(play)
   }
   return (
     <div className="StartBtn">
